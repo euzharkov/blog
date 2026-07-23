@@ -1,0 +1,18 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Claude Code local (per-machine) settings
+.claude/settings.local.json
+
+# Node
+node_modules/
+
+# Logs & temp
+*.log
+*.tmp
