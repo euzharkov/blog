@@ -1,0 +1,234 @@
+/*
+ * Gmail (iOS) fidelity study — design system (Layer 1).
+ *
+ * Example output of the mobile-mockups-skill skill in fidelity mode: recreating the
+ * Gmail iOS app (captured on iPhone, 390×844 @3x) from real screenshots.
+ * A method demonstration — not affiliated with Google. All account data,
+ * senders, avatars, and label names in the screens are fictional: the study
+ * replicates the INTERFACE, never the user's mail.
+ *
+ * Values follow Google's Material palette as used by Gmail's light theme
+ * (blue #0b57d0 actions, the pink/red selected-item pair, blue-gray
+ * surfaces). Dark values are the pattern-correct projection — the captures
+ * are light.
+ *
+ * Conventions: colors are color-valued custom properties; fonts are
+ * --font-… and --weight-…; spacing --space-…; shape --radius-…; type .t-<role>.
+ */
+
+:root {
+  /* ---- Light: Gmail surfaces ---- */
+  --canvas: #ffffff;
+  --card: #ffffff;
+  --functional: #eff3fa; /* search pill, bottom bar, sheet groups canvas */
+  --selected: #d3e3fd; /* active tab pill, pressed */
+  --accent-tint: #fce8e6; /* selected drawer item — Gmail pink */
+
+  --ink-900: #1f1f1f;
+  --ink-600: #444746;
+  --ink-400: #6f7276;
+
+  /* Google blue pair: interactive carries text (links, buttons); decorative
+     is the Compose-pill / FAB fill that never carries small gray text. */
+  --accent-interactive: #0b57d0;
+  --accent-decorative: #c2e7ff;
+
+  /* Gmail red: brand mark, unread badge, selected drawer item text. */
+  --brand: #c5221f;
+  --danger: #c5221f;
+
+  /* Importance marker (the little yellow arrow) — decorative only. */
+  --importance: #f4b400;
+
+  /* Label tag palette (Gmail label colors, a working subset). */
+  --tag-green: #188038;
+  --tag-blue: #1a73e8;
+  --tag-red: #d93025;
+  --tag-yellow: #f9ab00;
+  --tag-pink: #d01884;
+
+  /* Avatar fills for fictional senders. */
+  --av-purple: #7c4dbe;
+  --av-teal: #12857b;
+  --av-navy: #1f3a5f;
+  --av-green: #2e7d32;
+  --av-blue: #1565c0;
+  --av-red: #c62828;
+
+  --border-subtle: #e4e6ea;
+  --border-control: #c7cad1;
+
+  --btn-fill: #0b57d0;
+  --btn-label: #ffffff;
+
+  /* ---- Type: Roboto (Google Sans approximated by Roboto Medium) ---- */
+  --font-display: "Roboto", -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Roboto", -apple-system, "Segoe UI", sans-serif;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* ---- Spacing: 4px scale ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* ---- Shape ---- */
+  --radius-small: 8px;
+  --radius-control: 16px; /* sheet groups, suggestion chips */
+  --radius-card: 24px; /* search pill is a full pill; cards large-round */
+  --radius-pill: 999px;
+
+  --screen-inset: 16px;
+}
+
+/* ---- Type roles — Gmail's scale as measured on the captures ---- */
+
+.t-subject-lg {
+  /* thread subject */
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: 26px;
+  line-height: 34px;
+  color: var(--ink-900);
+}
+.t-hi {
+  /* "Hi, Sam!" on the account sheet */
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: 30px;
+  line-height: 38px;
+  color: var(--ink-900);
+}
+.t-item {
+  /* drawer rows */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 19px;
+  line-height: 26px;
+  color: var(--ink-600);
+}
+.t-row-strong {
+  /* unread sender / subject */
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: 17px;
+  line-height: 23px;
+  color: var(--ink-900);
+}
+.t-row {
+  /* read sender / subject */
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 17px;
+  line-height: 23px;
+  color: var(--ink-900);
+}
+.t-snippet {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 15px;
+  line-height: 21px;
+  color: var(--ink-600);
+}
+.t-meta {
+  /* times, counts, "to Sam" */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-600);
+}
+.t-overline {
+  /* "All inboxes" list header, "LABELS", "Suggestions" */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.6px;
+  color: var(--ink-600);
+}
+.t-search {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--ink-600);
+}
+.t-btn {
+  /* Compose, Reply, Forward, Done, Manage account */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 17px;
+  line-height: 22px;
+  color: var(--accent-interactive);
+}
+.t-link {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--accent-interactive);
+}
+.t-chip {
+  /* "Inbox" chip, "Actively recruiting" */
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-600);
+}
+.t-body {
+  /* email body, form fields */
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 17px;
+  line-height: 24px;
+  color: var(--ink-900);
+}
+
+/* ---- Dark: Gmail dark projection ---- */
+.theme-dark .screen,
+.screen.night {
+  --canvas: #131314;
+  --card: #1e1f20;
+  --functional: #282a2c;
+  --selected: #004a77;
+  --accent-tint: #4a2523;
+
+  --ink-900: #e3e3e3;
+  --ink-600: #c4c7c5;
+  --ink-400: #8e918f;
+
+  --accent-interactive: #a8c7fa;
+  --accent-decorative: #004a77;
+
+  --brand: #f2b8b5;
+  --danger: #f2b8b5;
+  --importance: #fdd663;
+
+  --tag-green: #6dd58c;
+  --tag-blue: #8ab4f8;
+  --tag-red: #f28b82;
+  --tag-yellow: #fdd663;
+  --tag-pink: #ff8bcb;
+
+  --av-purple: #b39ddb;
+  --av-teal: #4db6ac;
+  --av-navy: #7c9ecf;
+  --av-green: #81c784;
+  --av-blue: #64b5f6;
+  --av-red: #e57373;
+
+  --border-subtle: #2f3133;
+  --border-control: #47494c;
+
+  --btn-fill: #a8c7fa;
+  --btn-label: #062e6f;
+}

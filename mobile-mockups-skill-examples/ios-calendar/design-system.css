@@ -1,0 +1,222 @@
+/*
+ * iOS Calendar fidelity study — design system (Layer 1).
+ *
+ * Example output of the mobile-mockups-skill skill with a different goal than
+ * invention: recreate Apple's iOS Calendar (iOS 26 simulator, iPhone,
+ * 390×844) as closely as possible from real screenshots. Not affiliated
+ * with Apple; a method demonstration.
+ *
+ * Values are Apple's documented system colors and text styles (HIG /
+ * UIKit semantic colors), not pixel-sampled guesses. Where Apple's own
+ * choices fall below WCAG AA (systemRed on white, tertiary labels), the
+ * audit documents it — see the intentional-exceptions note in
+ * DESIGN-SYSTEM.md. In a fidelity study the reference wins; the audit
+ * exists to make that trade-off visible instead of silent.
+ *
+ * Conventions: colors are color-valued custom properties; fonts are
+ * --font-… / --weight-…; spacing --space-…; shape --radius-…; type .t-<role>.
+ */
+
+:root {
+  /* ---- Light: iOS system palette ---- */
+  --canvas: #ffffff; /* systemBackground */
+  --card: #ffffff; /* secondarySystemGroupedBackground */
+  --functional: #f2f2f7; /* systemGray6 — banners, grouped canvas */
+  --selected: #e5e5ea; /* systemGray5 — pressed fills */
+  --accent-tint: #ffe5e2; /* soft red wash (event highlight) */
+
+  --ink-900: #000000; /* label */
+  --ink-600: rgba(60, 60, 67, 0.6); /* secondaryLabel */
+  --ink-400: rgba(60, 60, 67, 0.3); /* tertiaryLabel */
+
+  /* systemRed pair. Interactive carries the Today number and text actions
+     exactly as iOS does — at 3.5:1 on white it fails AA for small text;
+     kept for fidelity and flagged by the audit on purpose. */
+  --accent-interactive: #ff3b30;
+  --accent-decorative: #ff6961;
+
+  --danger: #ff3b30; /* iOS uses the same red */
+
+  /* Floating "liquid glass" pill material, approximated as a solid. */
+  --material-pill: #f4f4f6;
+
+  /* Calendar event colors (default calendar palette on a fresh device). */
+  --cal-event: #1d80f2; /* calendar blue */
+  --cal-event-soft: #ddedfd;
+  --cal-event-ink: #0f62c1;
+
+  /* US Holidays calendar (purple star) and Birthdays (slate gift),
+     as they appear on a fresh device. */
+  --holiday: #af52de;
+  --holiday-soft: #f3e2fc;
+  --holiday-ink: #8b2fc9;
+  --birthday: #8a99af;
+
+  --border-subtle: #e5e5ea; /* separator on white */
+  --border-control: #c6c6c8; /* opaque separator */
+
+  /* Selected-day circle in the week strip: black chip, white numeral. */
+  --btn-fill: #000000;
+  --btn-label: #ffffff;
+
+  /* ---- Type: SF via the system stack ---- */
+  --font-display: -apple-system, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  --font-body: -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ---- Spacing: 4px scale ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* ---- Shape ---- */
+  --radius-small: 6px; /* event pills */
+  --radius-control: 12px; /* value chips */
+  --radius-card: 26px; /* iOS 26 sheet groups — much rounder than classic */
+  --radius-pill: 999px; /* floating toolbars */
+
+  --screen-inset: 16px; /* iOS list margin */
+}
+
+/* ---- Type roles — Apple text styles at their HIG metrics ---- */
+
+.t-large-title {
+  /* month "July" / year "2026" — bold, as captured */
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 41px;
+  letter-spacing: 0.4px;
+  color: var(--ink-900);
+}
+.t-title2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: -0.4px;
+  color: var(--ink-900);
+}
+.t-nav {
+  /* nav-pill label ("‹ July") — title3-ish, semibold as rendered */
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: 20px;
+  line-height: 25px;
+  letter-spacing: -0.4px;
+  color: var(--ink-900);
+}
+.t-headline {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: 17px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  color: var(--ink-900);
+}
+.t-body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 17px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  color: var(--ink-900);
+}
+.t-subhead {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.2px;
+  color: var(--ink-900);
+}
+.t-subhead-strong {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.2px;
+  color: var(--ink-900);
+}
+.t-footnote {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.1px;
+  color: var(--ink-600);
+}
+.t-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-600);
+}
+.t-day-number {
+  /* week-strip numerals — 26pt regular as measured on the capture */
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-size: 26px;
+  line-height: 32px;
+  color: var(--ink-900);
+}
+.t-grid-number {
+  /* month-grid numerals — smaller and semibold, unlike the week strip */
+  font-family: var(--font-body);
+  font-weight: var(--weight-semibold);
+  font-size: 22px;
+  line-height: 28px;
+  color: var(--ink-900);
+}
+.t-on-accent {
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
+  font-size: 26px;
+  line-height: 32px;
+  color: var(--btn-label);
+}
+
+/* ---- Dark: iOS true dark ---- */
+.theme-dark .screen,
+.screen.night {
+  --canvas: #000000;
+  --card: #1c1c1e; /* systemGray6 dark */
+  --functional: #1c1c1e;
+  --selected: #2c2c2e;
+  --accent-tint: #3a201d;
+
+  --ink-900: #ffffff;
+  --ink-600: rgba(235, 235, 245, 0.6);
+  --ink-400: rgba(235, 235, 245, 0.3);
+
+  --accent-interactive: #ff453a;
+  --accent-decorative: #ff6961;
+
+  --danger: #ff453a;
+
+  --material-pill: #1f1f21;
+
+  --cal-event: #409cff;
+  --cal-event-soft: rgba(64, 156, 255, 0.22);
+  --cal-event-ink: #7dbbff;
+
+  --holiday: #bf5af2;
+  --holiday-soft: rgba(191, 90, 242, 0.24);
+  --holiday-ink: #d795f5;
+  --birthday: #8a99af;
+
+  --border-subtle: #2c2c2e;
+  --border-control: #38383a;
+
+  --btn-fill: #ffffff;
+  --btn-label: #000000;
+}

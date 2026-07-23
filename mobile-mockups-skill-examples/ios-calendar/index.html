@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iOS Calendar — fidelity study</title>
+    <link rel="stylesheet" href="design-system.css" />
+    <!-- Workbench copied from the skill's assets/ to the examples root, the
+         same way a real project copies these files next to its pages. -->
+    <link rel="stylesheet" href="../mockup.css" />
+    <!-- Phosphor stands in for SF Symbols — closest free glyph set. -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+    <style>
+      /* =====================================================================
+         Layer 2 — iOS Calendar screen CSS. Geometry measured from real
+         iPhone captures (390×844 @3x, iOS 26.5 simulator); colors from the
+         design system only.
+         ===================================================================== */
+
+      /* ---- floating pill chrome ---- */
+      .nav-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: var(--space-1);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        background: var(--material-pill);
+        border-radius: var(--radius-pill);
+        padding: var(--space-2) var(--space-4);
+        min-height: 42px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      }
+      .pill i {
+        font-size: 21px;
+        color: var(--ink-900);
+        line-height: 1;
+      }
+      .pill .pi + .pi {
+        margin-left: var(--space-4);
+      }
+
+      /* ---- bottom floating bar ---- */
+      .ios-bottom {
+        position: absolute;
+        left: var(--space-4);
+        right: var(--space-4);
+        bottom: var(--space-4);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 30;
+      }
+
+      /* ---- year view ---- */
+      .y-title {
+        color: var(--accent-interactive);
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: var(--space-2);
+        margin-top: var(--space-2);
+      }
+      .y-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: var(--space-5);
+        row-gap: var(--space-6);
+        margin-top: var(--space-4);
+      }
+      .y-name {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 17px;
+        line-height: 22px;
+        color: var(--ink-900);
+        margin-bottom: var(--space-1);
+      }
+      .y-name.now {
+        color: var(--accent-interactive);
+      }
+      .y-mini {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+      }
+      .y-mini span {
+        font-family: var(--font-body);
+        font-size: 10px;
+        line-height: 15px;
+        font-weight: var(--weight-medium);
+        color: var(--ink-900);
+      }
+      .y-mini .td {
+        background: var(--accent-interactive);
+        color: var(--btn-label);
+        border-radius: var(--radius-pill);
+      }
+
+      /* ---- month view ---- */
+      .m-head {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        margin-top: var(--space-3);
+        padding-bottom: var(--space-1);
+      }
+      .m-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        margin: 0 calc(-1 * var(--screen-inset));
+      }
+      .m-cell {
+        height: 88px;
+        border-top: 1px solid var(--border-subtle);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding-top: var(--space-1);
+      }
+      .m-cell .mn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-pill);
+      }
+      .m-cell.wknd .t-grid-number {
+        color: var(--ink-600);
+      }
+      .m-cell.today .mn {
+        background: var(--accent-interactive);
+      }
+      .m-cell.today .t-grid-number {
+        color: var(--btn-label);
+      }
+      .hol-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        background: var(--holiday-soft);
+        color: var(--holiday-ink);
+        border-radius: var(--radius-pill);
+        padding: 2px 7px;
+        font-family: var(--font-body);
+        font-size: 11px;
+        font-weight: var(--weight-semibold);
+        max-width: 52px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .hol-chip i {
+        font-size: 11px;
+        flex: 0 0 auto;
+      }
+
+      /* ---- list (agenda) view ---- */
+      .li-today {
+        color: var(--accent-interactive);
+        margin-top: var(--space-3);
+      }
+      .li-sec {
+        margin-top: var(--space-8);
+      }
+      .li-sec .lh {
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .li-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-4) 0;
+      }
+      .li-row .ic {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff; /* glyph on solid calendar color, both themes */
+        font-size: 18px;
+        flex: 0 0 auto;
+      }
+      .li-row .grow {
+        flex: 1;
+      }
+      .li-row .meta {
+        color: var(--ink-600);
+      }
+
+      /* ---- day view ---- */
+      .wk {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        margin-top: var(--space-3);
+        row-gap: var(--space-1);
+      }
+      .wk .wk-day {
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .wk .sel {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-pill);
+        background: var(--btn-fill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .wk .today-num {
+        color: var(--accent-interactive);
+      }
+      .day-banner {
+        background: var(--functional);
+        margin: var(--space-3) calc(-1 * var(--screen-inset)) 0;
+        padding: var(--space-2) var(--screen-inset);
+        text-align: center;
+        border-top: 1px solid var(--border-subtle);
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .tl {
+        margin-top: var(--space-2);
+        position: relative;
+      }
+      .hr-row {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--space-2);
+        height: 52px;
+      }
+      .hr-label {
+        flex: 0 0 46px;
+        display: flex;
+        align-items: baseline;
+        gap: 3px;
+        transform: translateY(-9px);
+      }
+      .hr-label .n {
+        color: var(--ink-600);
+        font-family: var(--font-body);
+        font-size: 16px;
+        font-weight: var(--weight-regular);
+      }
+      .hr-line {
+        flex: 1;
+        border-top: 1px solid var(--border-subtle);
+        margin-right: calc(-1 * var(--screen-inset));
+      }
+      .evt-block {
+        position: absolute;
+        left: 54px;
+        right: 0;
+        border-radius: var(--radius-small);
+        background: var(--cal-event-soft);
+        border-left: 3px solid var(--cal-event);
+        padding: var(--space-1) var(--space-2);
+        overflow: hidden;
+      }
+      .evt-block .et {
+        color: var(--cal-event-ink);
+      }
+
+      /* ---- New sheet (iOS 26) ---- */
+      .sheet {
+        background: var(--functional);
+        margin: 0 calc(-1 * var(--screen-inset));
+        padding: var(--space-3) var(--screen-inset) var(--space-6);
+        flex: 1;
+      }
+      .sheet-nav {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        margin-bottom: var(--space-4);
+      }
+      .circle-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--card);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        font-size: 20px;
+        color: var(--ink-900);
+      }
+      .circle-btn.disabled {
+        background: var(--selected);
+        color: var(--ink-400);
+        box-shadow: none;
+      }
+      .seg {
+        display: flex;
+        background: var(--selected);
+        border-radius: var(--radius-pill);
+        padding: 2px;
+        margin-bottom: var(--space-6);
+      }
+      .seg span {
+        flex: 1;
+        text-align: center;
+        padding: var(--space-2) 0;
+        border-radius: var(--radius-pill);
+        color: var(--ink-900);
+      }
+      .seg .on {
+        background: var(--card);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      }
+      .group {
+        background: var(--card);
+        border-radius: var(--radius-card);
+        margin-bottom: var(--space-5);
+        overflow: hidden;
+        padding: 0 var(--space-5);
+      }
+      .cell {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-4) 0;
+        min-height: 52px;
+      }
+      .cell + .cell {
+        border-top: 1px solid var(--border-subtle);
+      }
+      .cell .val {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        color: var(--ink-600);
+      }
+      .cell .val i {
+        color: var(--ink-600);
+        font-size: 15px;
+      }
+      .chip-btn {
+        background: var(--selected);
+        border-radius: var(--radius-control);
+        padding: var(--space-2) var(--space-3);
+        color: var(--ink-900);
+      }
+      .switch {
+        width: 51px;
+        height: 31px;
+        border-radius: var(--radius-pill);
+        background: var(--selected);
+        position: relative;
+        flex: 0 0 auto;
+      }
+      .switch .knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 27px;
+        height: 27px;
+        border-radius: var(--radius-pill);
+        background: #ffffff; /* physical knob — same in both themes, like iOS */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      .placeholder {
+        color: var(--ink-400);
+      }
+      .caret-bar {
+        display: inline-block;
+        width: 2px;
+        height: 22px;
+        background: var(--accent-interactive);
+        vertical-align: -4px;
+        margin-right: 2px;
+      }
+      .cal-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: var(--radius-pill);
+        background: var(--cal-event);
+        flex: 0 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../mockup.js"></script>
+    <script>
+      const icon = (name, fill = false) => `<i class="ph${fill ? "-fill" : ""} ph-${name}"></i>`;
+
+      /* ---- shared chrome ---- */
+
+      const navRow = (backLabel, icons) => `
+        <div class="nav-row">
+          <span class="pill"><i class="ph-bold ph-caret-left" style="font-size:17px"></i><span class="t-nav">${backLabel}</span></span>
+          <span class="pill">${icons.map((n) => `<span class="pi">${icon(n)}</span>`).join("")}</span>
+        </div>`;
+
+      const bottomBar = `
+        <div class="ios-bottom">
+          <span class="pill"><span class="t-headline">Today</span></span>
+          <span class="pill"><span class="pi">${icon("calendar-dots")}</span><span class="pi">${icon("tray")}</span></span>
+        </div>`;
+
+      /* ---- year view: mini-months computed from real 2026 dates ---- */
+
+      const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      function miniMonth(m) {
+        const first = new Date(2026, m, 1).getDay();
+        const days = new Date(2026, m + 1, 0).getDate();
+        let cells = "<span></span>".repeat(first);
+        for (let d = 1; d <= days; d++)
+          cells += `<span class="${m === 6 && d === 23 ? "td" : ""}">${d}</span>`;
+        return `<div><div class="y-name ${m === 6 ? "now" : ""}">${MONTHS[m]}</div><div class="y-mini">${cells}</div></div>`;
+      }
+
+      const yearView = phone(
+        `<div class="nav-row" style="justify-content: flex-end">
+          <span class="pill"><span class="pi">${icon("magnifying-glass")}</span><span class="pi">${icon("plus")}</span></span>
+        </div>
+        <h2 class="t-large-title y-title">2026</h2>
+        <div class="y-grid">${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(miniMonth).join("")}</div>
+        ${bottomBar}`,
+        { scroll: false },
+      );
+
+      /* ---- month view ---- */
+
+      const mCell = (num, opts = {}) =>
+        `<div class="m-cell ${opts.wknd ? "wknd" : ""} ${opts.today ? "today" : ""}">
+          <span class="mn"><span class="t-grid-number">${num}</span></span>
+          ${opts.chip ? `<span class="hol-chip">${icon("star", true)}${opts.chip}</span>` : ""}
+        </div>`;
+
+      const monthView = phone(
+        `${navRow("2026", ["cards", "magnifying-glass", "plus"])}
+         <h2 class="t-large-title" style="margin-top: var(--space-3)">July</h2>
+         <div class="m-head">${["S", "M", "T", "W", "T", "F", "S"].map((c, i) => `<span class="t-caption" ${i % 6 === 0 ? "" : 'style="color: var(--ink-900)"'}>${c}</span>`).join("")}</div>
+         <div class="m-grid">
+           ${mCell("", { wknd: true })}${mCell("")}${mCell("")}${mCell(1)}${mCell(2)}${mCell(3, { chip: "Indep" })}${mCell(4, { wknd: true, chip: "Indep" })}
+           ${mCell(5, { wknd: true })}${mCell(6)}${mCell(7)}${mCell(8)}${mCell(9)}${mCell(10)}${mCell(11, { wknd: true })}
+           ${mCell(12, { wknd: true })}${mCell(13)}${mCell(14)}${mCell(15)}${mCell(16)}${mCell(17)}${mCell(18, { wknd: true })}
+           ${mCell(19, { wknd: true })}${mCell(20)}${mCell(21)}${mCell(22)}${mCell(23, { today: true })}${mCell(24)}${mCell(25, { wknd: true })}
+           ${mCell(26, { wknd: true })}${mCell(27)}${mCell(28)}${mCell(29)}${mCell(30)}${mCell(31)}${mCell("")}
+         </div>
+         ${bottomBar}`,
+        { scroll: false },
+      );
+
+      /* ---- list (agenda) view ---- */
+
+      const liRow = (color, glyph, title, meta) =>
+        `<div class="li-row">
+          <span class="ic" style="background: var(--${color})">${icon(glyph, true)}</span>
+          <span class="t-nav grow">${title}</span>
+          <span class="t-body meta">${meta}</span>
+        </div>`;
+      const liSec = (header, rows) =>
+        `<div class="li-sec"><div class="lh t-nav">${header}</div>${rows}</div>`;
+
+      const listView = phone(
+        `${navRow("July", ["list-bullets", "magnifying-glass", "plus"])}
+         <div class="li-today t-nav">Thursday – Jul 23</div>
+         ${liSec("Saturday – Aug 29", liRow("birthday", "gift", "Anna Haro’s 41st Birthday", "all-day"))}
+         ${liSec("Monday – Sep 7", liRow("holiday", "star", "Labor Day", "all-day"))}
+         ${liSec("Saturday – Sep 12", liRow("holiday", "star", "Rosh Hashanah", "all-day"))}
+         ${liSec("Sunday – Sep 13", liRow("holiday", "star", "Rosh Hashanah (day 2)", "all-day"))}
+         ${liSec("Monday – Sep 21", liRow("holiday", "star", "Yom Kippur", "all-day"))}
+         ${bottomBar}`,
+        { scroll: false },
+      );
+
+      /* ---- day view ---- */
+
+      const weekStrip = `
+        <div class="wk">
+          ${["S", "M", "T", "W", "T", "F", "S"].map((c) => `<span class="t-caption">${c}</span>`).join("")}
+          <div class="wk-day"><span class="t-day-number">19</span></div>
+          <div class="wk-day"><span class="t-day-number">20</span></div>
+          <div class="wk-day"><span class="t-day-number">21</span></div>
+          <div class="wk-day"><span class="sel"><span class="t-on-accent">22</span></span></div>
+          <div class="wk-day"><span class="t-day-number today-num">23</span></div>
+          <div class="wk-day"><span class="t-day-number">24</span></div>
+          <div class="wk-day"><span class="t-day-number">25</span></div>
+        </div>`;
+
+      const hourRow = (n, mer) =>
+        `<div class="hr-row"><span class="hr-label"><span class="n">${n}</span><span class="t-caption">${mer}</span></span><span class="hr-line"></span></div>`;
+      const timeline = (events = "") =>
+        `<div class="tl">${[[8, "AM"], [9, "AM"], [10, "AM"], [11, "AM"], ["Noon", ""], [1, "PM"], [2, "PM"], [3, "PM"], [4, "PM"], [5, "PM"], [6, "PM"]].map(([n, m]) => hourRow(n, m)).join("")}${events}</div>`;
+
+      const dayChrome = (inner) =>
+        `${navRow("July", ["cards", "magnifying-glass", "plus"])}
+         ${weekStrip}
+         <div class="day-banner"><span class="t-subhead-strong">Wednesday – Jul 22, 2026</span></div>
+         ${inner}
+         ${bottomBar}`;
+
+      const dayEmpty = phone(dayChrome(timeline()), { scroll: false });
+
+      /* 52px row = 1 hour; event blocks positioned on that scale. */
+      const dayEvents = phone(
+        dayChrome(
+          timeline(
+            `<div class="evt-block" style="top: 52px; height: 50px">
+               <div class="t-subhead-strong et">Coffee with Lena</div>
+               <div class="t-footnote">9 – 10 AM · Café Anza</div>
+             </div>
+             <div class="evt-block" style="top: 260px; height: 76px">
+               <div class="t-subhead-strong et">Design sync</div>
+               <div class="t-footnote">1 – 2:30 PM · Room 4</div>
+             </div>`,
+          ),
+        ),
+        { scroll: false },
+      );
+
+      /* ---- New sheet (iOS 26) ---- */
+
+      const stepper = icon("caret-up-down");
+      const newSheet = phone(
+        `<div class="sheet">
+          <div class="sheet-nav">
+            <span class="circle-btn">${icon("x")}</span>
+            <span class="t-headline" style="text-align: center">New</span>
+            <span class="circle-btn disabled">${icon("check", true)}</span>
+          </div>
+          <div class="seg">
+            <span class="t-subhead-strong on">Event</span>
+            <span class="t-subhead">Reminder</span>
+          </div>
+          <div class="group">
+            <div class="cell"><span class="t-body placeholder"><span class="caret-bar"></span>Title</span></div>
+            <div class="cell"><span class="t-body placeholder">Location or Video Call</span></div>
+          </div>
+          <div class="group">
+            <div class="cell"><span class="t-body">All-day</span><span class="switch"><span class="knob"></span></span></div>
+            <div class="cell"><span class="t-body">Starts</span><span class="val"><span class="chip-btn t-body">Jul 23, 2026</span><span class="chip-btn t-body">1:00 PM</span></span></div>
+            <div class="cell"><span class="t-body">Ends</span><span class="val"><span class="chip-btn t-body">Jul 23, 2026</span><span class="chip-btn t-body">2:00 PM</span></span></div>
+            <div class="cell"><span class="t-body">Travel Time</span><span class="val"><span class="t-body" style="color: var(--ink-600)">None</span>${stepper}</span></div>
+          </div>
+          <div class="group">
+            <div class="cell"><span class="t-body">Repeat</span><span class="val"><span class="t-body" style="color: var(--ink-600)">Never</span>${stepper}</span></div>
+          </div>
+          <div class="group">
+            <div class="cell"><span class="t-body">Calendar</span><span class="val"><span class="cal-dot"></span><span class="t-body" style="color: var(--ink-600)">Calendar</span>${stepper}</span></div>
+          </div>
+          <div class="group">
+            <div class="cell"><span class="t-body">Alert</span><span class="val"><span class="t-body" style="color: var(--ink-600)">None</span>${stepper}</span></div>
+          </div>
+        </div>`,
+        { scroll: true },
+      );
+
+      renderMockupPage({
+        title: "iOS Calendar — fidelity study",
+        intro:
+          "Example produced by the mobile-mockups-skill skill in fidelity mode: recreating Apple's iOS Calendar (iOS 26.5 simulator, iPhone, 390×844) from real captures instead of inventing a design. Colors are Apple's documented system palette; geometry is measured from the screenshots. A method demonstration — not affiliated with Apple.",
+        contrastPairs: [
+          ["--ink-900", "--canvas"],
+          ["--ink-900", "--functional"],
+          ["--ink-600", "--canvas"],
+          ["--ink-400", "--canvas"],
+          ["--accent-interactive", "--canvas"],
+          ["--accent-interactive", "--functional"],
+          ["--btn-label", "--btn-fill"],
+          ["--btn-label", "--accent-interactive"],
+          ["--cal-event-ink", "--cal-event-soft", "--canvas"],
+          ["--holiday-ink", "--holiday-soft", "--canvas"],
+        ],
+        sections: [
+          {
+            id: "views",
+            title: "Year, month, list",
+            desc: "The three zoom levels, each rebuilt against a capture. Year and month numerals are generated from real 2026 dates, so the layouts are provably correct.",
+            cols: [
+              {
+                label: "<b>Year.</b> Red bold year, twelve mini-months, current month red, today circled.",
+                tag: "From capture",
+                html: yearView,
+              },
+              {
+                label: "<b>Month.</b> Bold black title, grayed weekends, hairline week rows, holiday chips truncating exactly like the original.",
+                tag: "From capture",
+                html: monthView,
+              },
+              {
+                label: "<b>List.</b> Date sections with calendar-colored icon circles; today's header in red with nothing scheduled under it.",
+                tag: "From capture",
+                html: listView,
+              },
+            ],
+            notes: [
+              note(
+                "Where fidelity beats the audit",
+                "systemRed on white is 3.5:1 and tertiary labels are lower still — Apple ships both. The audit flags them and DESIGN-SYSTEM.md records them as intentional exceptions: in a fidelity study the reference wins, visibly.",
+              ),
+            ],
+          },
+          {
+            id: "day",
+            title: "Day view",
+            desc: "The view the app opens to. Left phone reproduces the first capture (empty timeline); right phone adds events on the same 52px-per-hour scale.",
+            cols: [
+              {
+                label: "<b>As captured.</b> Week strip: black circle = selected day, red numeral = today. Floating pill chrome, hairline hours.",
+                tag: "From capture",
+                html: dayEmpty,
+              },
+              {
+                label: "<b>With events.</b> Soft-tinted blocks, calendar-colored bar and title — geometry follows the hour grid.",
+                tag: "Reconstruction",
+                html: dayEvents,
+              },
+            ],
+            notes: [
+              note(
+                "Liquid-glass approximation",
+                "iOS 26 pills are translucent material with blur. Static mockups approximate them as a solid (--material-pill) plus a soft shadow — close at a glance, and honest about being a stand-in.",
+              ),
+            ],
+          },
+          {
+            id: "new-event",
+            title: "New sheet",
+            desc: "iOS 26 replaced the classic New Event form: X/✓ circle buttons, an Event–Reminder segmented pill, big-radius groups, and value chips with steppers.",
+            cols: [
+              {
+                label: "<b>New.</b> Disabled ✓ until a title exists; red text caret in the empty Title field, exactly as captured.",
+                tag: "From capture",
+                html: newSheet,
+              },
+            ],
+            notes: [],
+          },
+        ],
+        pageNotes: [
+          note(
+            "Provenance",
+            "Reference: iPhone 17e simulator, iOS 26.5, com.apple.mobilecal — one capture via simctl, four navigated and captured by hand. 1170×2532 = 390×844 @3x, matching the mockup frame 1:1. Status bar shows the workbench's generic 9:41; Phosphor glyphs stand in for SF Symbols.",
+          ),
+        ],
+      });
+    </script>
+  </body>
+</html>

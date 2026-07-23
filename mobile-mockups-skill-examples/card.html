@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(160deg, #a5b8e8 0%, #c9b3dd 48%, #e8b8c8 100%);
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+      .text {
+        width: 620px;
+        padding-left: 72px;
+        color: #fff;
+        text-shadow: 0 1px 6px rgba(25, 30, 70, 0.35);
+        position: relative;
+        z-index: 2;
+      }
+      h1 {
+        font-size: 58px;
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+        margin-bottom: 22px;
+      }
+      .sub {
+        font-size: 25px;
+        line-height: 1.35;
+        font-weight: 500;
+        opacity: 0.95;
+        margin-bottom: 34px;
+      }
+      .cmd {
+        display: inline-block;
+        font-family: "SF Mono", ui-monospace, Menlo, monospace;
+        font-size: 17px;
+        font-weight: 600;
+        white-space: nowrap;
+        color: #2b2f55;
+        background: rgba(255, 255, 255, 0.88);
+        border-radius: 14px;
+        padding: 14px 20px;
+        text-shadow: none;
+        box-shadow: 0 6px 18px rgba(25, 30, 70, 0.25);
+      }
+      .phones { position: absolute; right: 0; top: 0; bottom: 0; width: 660px; z-index: 1; }
+      .phones img {
+        position: absolute;
+        width: 300px;
+        border-radius: 41px;
+        box-shadow: 0 24px 60px rgba(25, 30, 70, 0.45);
+      }
+      .cal { right: 330px; top: 88px; transform: rotate(-4deg); }
+      .gmail { right: 48px; top: 44px; transform: rotate(3deg); }
+    </style>
+  </head>
+  <body>
+    <div class="text">
+      <h1>Design mobile apps<br />in plain HTML</h1>
+      <div class="sub">
+        mobile-mockups-skill — an Agent Skill for Claude&nbsp;Code, Codex,
+        Cursor, and&nbsp;more
+      </div>
+      <span class="cmd">npx skills add euzharkov/mobile-mockups-skill</span>
+    </div>
+    <div class="phones">
+      <img class="cal" src="phone-cal.png" alt="" />
+      <img class="gmail" src="phone-gmail.png" alt="" />
+    </div>
+  </body>
+</html>

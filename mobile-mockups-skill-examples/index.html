@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Mockups — worked examples</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+          "Helvetica Neue", Arial, sans-serif;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(165deg, #a5b8e8 0%, #c9b3dd 45%, #e8b8c8 100%);
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: linear-gradient(165deg, #1b2440 0%, #2e2247 45%, #40233a 100%);
+        }
+      }
+      main {
+        text-align: center;
+      }
+      .apps {
+        display: flex;
+        justify-content: center;
+        gap: 56px;
+      }
+      .app {
+        display: block;
+        width: 112px;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .icon {
+        width: 112px;
+        height: 112px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 26px; /* ~iOS squircle radius at this size */
+        box-shadow:
+          0 10px 24px rgba(20, 24, 60, 0.28),
+          0 2px 6px rgba(20, 24, 60, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease;
+      }
+      .app:hover .icon,
+      .app:focus-visible .icon {
+        transform: scale(1.07);
+      }
+      .app:active .icon {
+        transform: scale(0.96);
+      }
+      .label {
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #fff;
+        text-shadow: 0 1px 4px rgba(20, 24, 60, 0.45);
+      }
+      /* Calendar icon face: weekday over a large light date, like iOS */
+      .cal {
+        text-align: center;
+        line-height: 1;
+      }
+      .cal .weekday {
+        display: block;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #ff453a;
+        margin-bottom: 4px;
+      }
+      .cal .day {
+        display: block;
+        font-size: 58px;
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        color: #1c1c1e;
+      }
+      .caption {
+        margin-top: 48px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 1px 3px rgba(20, 24, 60, 0.35);
+      }
+      .caption a {
+        color: inherit;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="apps">
+        <a class="app" href="gmail/" aria-label="Open the Gmail fidelity study">
+          <span class="icon">
+            <svg width="58" height="58" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285f4" d="M1.636 21h3.819V11.73L0 7.636v11.727C0 20.267.732 21 1.636 21z" />
+              <path fill="#34a853" d="M18.545 21h3.819c.904 0 1.636-.733 1.636-1.637V7.636l-5.455 4.094z" />
+              <path fill="#fbbc04" d="M18.545 4.91v6.82L24 7.635V5.727c0-2.023-2.309-3.178-3.927-1.964z" />
+              <path fill="#ea4335" d="M5.455 11.73V4.91L12 9.82l6.545-4.91v6.82L12 16.64z" />
+              <path fill="#c5221f" d="M0 5.727v1.91l5.455 4.093V4.91L3.927 3.763C2.309 2.55 0 3.704 0 5.727z" />
+            </svg>
+          </span>
+          <span class="label">Gmail</span>
+        </a>
+        <a class="app" href="ios-calendar/" aria-label="Open the iOS Calendar fidelity study">
+          <span class="icon">
+            <span class="cal">
+              <span class="weekday" id="cal-weekday">Wed</span>
+              <span class="day" id="cal-day">23</span>
+            </span>
+          </span>
+          <span class="label">Calendar</span>
+        </a>
+      </div>
+      <p class="caption">
+        Fidelity studies built with the
+        <a href="https://github.com/euzharkov/mobile-mockups-skill">mobile-mockups-skill</a>
+      </p>
+    </main>
+    <script>
+      // Like the real iOS Calendar icon, show today's date.
+      const now = new Date();
+      document.getElementById("cal-weekday").textContent = now.toLocaleDateString(
+        "en-US",
+        { weekday: "short" },
+      );
+      document.getElementById("cal-day").textContent = now.getDate();
+    </script>
+  </body>
+</html>

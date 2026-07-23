@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gmail — fidelity study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="design-system.css" />
+    <!-- Workbench copied from the skill's assets/ to the examples root, the
+         same way a real project copies these files next to its pages. -->
+    <link rel="stylesheet" href="../mockup.css" />
+    <!-- Phosphor stands in for Google's icon set. -->
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+    <style>
+      /* =====================================================================
+         Layer 2 — Gmail screen CSS. Geometry measured from real captures
+         (390×844 @3x); colors from the design system. Raw grays appear only
+         in the simulated iOS keyboard — preview-only OS material.
+         ===================================================================== */
+
+      .stack > * + * {
+        margin-top: var(--space-3);
+      }
+
+      /* ---- inbox ---- */
+      .search-pill {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+        background: var(--functional);
+        border-radius: var(--radius-pill);
+        padding: var(--space-3) var(--space-4);
+        margin-top: var(--space-2);
+      }
+      .search-pill i {
+        font-size: 24px;
+        color: var(--ink-600);
+      }
+      .avatar {
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff; /* initial on solid avatar fill, both themes */
+        font-family: var(--font-body);
+        font-weight: var(--weight-medium);
+        flex: 0 0 auto;
+      }
+      .av-sm {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+        margin-left: auto;
+      }
+      .av-row {
+        width: 44px;
+        height: 44px;
+        font-size: 19px;
+      }
+      .inbox-hdr {
+        margin: var(--space-5) 0 var(--space-2);
+      }
+      .mrow {
+        display: flex;
+        gap: var(--space-3);
+        padding: var(--space-3) 0;
+        align-items: flex-start;
+      }
+      .mrow .mc {
+        flex: 1;
+        min-width: 0;
+      }
+      .mline {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: var(--space-2);
+      }
+      .mline .who {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+        min-width: 0;
+      }
+      .clip {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
+      .imp {
+        color: var(--importance);
+        font-size: 15px;
+        flex: 0 0 auto;
+      }
+      .star {
+        color: var(--ink-400);
+        font-size: 22px;
+        flex: 0 0 auto;
+        margin-left: var(--space-2);
+      }
+      .snip-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: var(--space-2);
+      }
+      .fab {
+        position: absolute;
+        right: var(--space-4);
+        bottom: 96px;
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        background: var(--accent-decorative);
+        border-radius: var(--radius-control);
+        padding: var(--space-4) var(--space-5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        z-index: 30;
+      }
+      .fab i {
+        font-size: 22px;
+        color: var(--accent-interactive);
+      }
+      .gbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 78px;
+        background: var(--functional);
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding-top: var(--space-3);
+        z-index: 25;
+      }
+      .gbar .tab {
+        position: relative;
+        width: 64px;
+        height: 36px;
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: var(--ink-600);
+      }
+      .gbar .tab.on {
+        background: var(--selected);
+        color: var(--ink-900);
+      }
+      .badge {
+        position: absolute;
+        top: -8px;
+        right: -6px;
+        background: var(--brand);
+        color: #fff; /* count on solid brand red, both themes */
+        border-radius: var(--radius-pill);
+        font-family: var(--font-body);
+        font-size: 11px;
+        font-weight: var(--weight-bold);
+        padding: 2px 7px;
+      }
+
+      /* ---- drawer ---- */
+      .behind {
+        position: absolute;
+        inset: 0;
+        background: var(--canvas);
+        padding: 90px var(--space-3) 0 0;
+        text-align: right;
+      }
+      .behind .bt {
+        margin-bottom: 62px;
+      }
+      .behind .bt i {
+        display: block;
+        margin-top: var(--space-2);
+        font-size: 22px;
+        color: var(--ink-400);
+      }
+      .dim {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+      }
+      .panel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 336px;
+        background: var(--card);
+        border-radius: 0 var(--radius-control) var(--radius-control) 0;
+        padding-top: 64px;
+        overflow: hidden;
+        z-index: 20;
+      }
+      .gm-logo {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: 0 var(--space-6) var(--space-4);
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .gm-logo i {
+        font-size: 30px;
+        color: var(--brand);
+      }
+      .gm-logo span {
+        font-family: var(--font-display);
+        font-weight: var(--weight-medium);
+        font-size: 24px;
+        color: var(--ink-600);
+      }
+      .drow {
+        display: flex;
+        align-items: center;
+        gap: var(--space-5);
+        height: 58px;
+        padding: 0 var(--space-5) 0 var(--space-6);
+      }
+      .drow i {
+        font-size: 24px;
+        color: var(--ink-600);
+        flex: 0 0 24px;
+      }
+      .drow .cnt {
+        margin-left: auto;
+      }
+      .drow.on {
+        background: var(--accent-tint);
+        border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+        margin-right: var(--space-3);
+      }
+      .drow.on i,
+      .drow.on .t-item,
+      .drow.on .cnt {
+        color: var(--brand);
+      }
+      .dsep {
+        border-top: 1px solid var(--border-subtle);
+        margin: var(--space-2) 0 var(--space-2) 76px;
+      }
+      .dhdr {
+        padding: var(--space-4) var(--space-6) var(--space-2);
+        text-transform: uppercase;
+      }
+
+      /* ---- thread ---- */
+      .tbar {
+        display: flex;
+        align-items: center;
+        margin-top: var(--space-2);
+        font-size: 24px;
+        color: var(--ink-600);
+      }
+      .tbar .sp {
+        flex: 1;
+      }
+      .tbar i + i {
+        margin-left: var(--space-6);
+      }
+      .subject-row {
+        display: flex;
+        gap: var(--space-3);
+        margin-top: var(--space-5);
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        background: var(--functional);
+        border-radius: var(--radius-small);
+        padding: 2px var(--space-2);
+        vertical-align: 4px;
+      }
+      .sender {
+        display: flex;
+        gap: var(--space-3);
+        align-items: flex-start;
+        margin-top: var(--space-5);
+      }
+      .sender .icons {
+        margin-left: auto;
+        display: flex;
+        gap: var(--space-5);
+        font-size: 22px;
+        color: var(--ink-600);
+        padding-top: var(--space-2);
+      }
+      .verified {
+        color: var(--accent-interactive);
+        font-size: 15px;
+      }
+      .mail-body {
+        border-top: 6px solid var(--functional);
+        margin: var(--space-4) calc(-1 * var(--screen-inset)) 0;
+        padding: var(--space-5) var(--screen-inset) 0;
+      }
+      .ww-head {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+      .ww-mark {
+        font-family: var(--font-display);
+        font-weight: var(--weight-bold);
+        font-size: 24px;
+        color: var(--accent-interactive);
+      }
+      .ww-head .icons {
+        margin-left: auto;
+        display: flex;
+        gap: var(--space-4);
+        font-size: 20px;
+        color: var(--ink-600);
+      }
+      .bell {
+        position: relative;
+      }
+      .bell .badge {
+        top: -9px;
+        right: -10px;
+      }
+      .job {
+        display: flex;
+        gap: var(--space-3);
+        margin-top: var(--space-5);
+        align-items: flex-start;
+      }
+      .job .logo {
+        width: 54px;
+        height: 54px;
+        border-radius: var(--radius-small);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff; /* glyph on solid brand fill */
+        font-size: 26px;
+        flex: 0 0 auto;
+      }
+      .job-title {
+        font-family: var(--font-body);
+        font-weight: var(--weight-medium);
+        font-size: 20px;
+        line-height: 26px;
+        color: var(--accent-interactive);
+      }
+      .rec-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-1);
+        background: var(--functional);
+        border-radius: var(--radius-small);
+        padding: 3px var(--space-2);
+        margin-top: var(--space-2);
+      }
+      /* ---- Harbor promo email: a nested third-party brand system, scoped
+         to this email mock — tokenized but deliberately not part of the app's
+         design system (the app doesn't own advertisers' palettes). ---- */
+      .harbor {
+        --hb-navy: #1a2b5c;
+        --hb-purple: #6a3fc3;
+        --hb-clock: #4b4a9e;
+        --hb-blue: #2b7bc7;
+        --hb-sky: #7fb3e8;
+      }
+      .preheader {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-4);
+        background: var(--functional);
+        margin: 0 calc(-1 * var(--screen-inset));
+        padding: var(--space-4) var(--screen-inset);
+      }
+      .preheader .vib {
+        text-decoration: underline;
+        white-space: nowrap;
+        color: var(--ink-600);
+      }
+      .bank-mark {
+        margin-top: var(--space-5);
+        font-family: var(--font-display);
+        color: var(--hb-navy);
+        line-height: 1.05;
+      }
+      .bank-mark .big {
+        font-size: 32px;
+        font-weight: var(--weight-bold);
+      }
+      .bank-mark .sub {
+        font-size: 15px;
+        font-weight: var(--weight-bold);
+      }
+      .hero {
+        background: #e9eef6; /* email's own panel tint */
+        margin-top: var(--space-4);
+        padding: var(--space-8) var(--space-5) 0;
+        text-align: center;
+        overflow: hidden;
+      }
+      .promo-pill {
+        display: inline-block;
+        background: var(--hb-purple);
+        color: #fff;
+        border-radius: var(--radius-pill);
+        padding: var(--space-2) var(--space-5);
+        font-family: var(--font-body);
+        font-size: 18px;
+        font-weight: var(--weight-medium);
+      }
+      .hero-h {
+        font-family: var(--font-body);
+        font-weight: var(--weight-regular);
+        font-size: 31px;
+        line-height: 40px;
+        color: var(--hb-navy);
+        margin-top: var(--space-4);
+      }
+      .hero-h b {
+        font-weight: var(--weight-bold);
+      }
+      .illus {
+        position: relative;
+        height: 200px;
+        margin-top: var(--space-5);
+      }
+      .cloud {
+        position: absolute;
+        height: 26px;
+        width: 74px;
+        border-radius: var(--radius-pill);
+        background: var(--hb-clock);
+      }
+      .clock {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-62%);
+        bottom: -34px;
+        width: 190px;
+        height: 190px;
+        border-radius: var(--radius-pill);
+        background: var(--hb-clock);
+      }
+      .hand {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 7px;
+        background: var(--hb-sky);
+        border-radius: var(--radius-pill);
+        transform-origin: 50% 100%;
+      }
+      .coin-box {
+        position: absolute;
+        right: 44px;
+        bottom: -20px;
+        width: 64px;
+        height: 58px;
+        background: var(--hb-blue);
+      }
+      .coin {
+        position: absolute;
+        right: 34px;
+        bottom: 30px;
+        width: 52px;
+        height: 52px;
+        border-radius: var(--radius-pill);
+        background: var(--hb-sky);
+        border: 6px solid var(--hb-navy);
+      }
+      .rate-hero {
+        text-align: center;
+        margin-top: var(--space-6);
+      }
+      .rate-hero .cd {
+        font-family: var(--font-body);
+        font-weight: var(--weight-bold);
+        font-size: 30px;
+        line-height: 38px;
+        color: var(--hb-navy);
+      }
+      .rate-hero .pct {
+        font-family: var(--font-body);
+        font-weight: var(--weight-medium);
+        font-size: 88px;
+        line-height: 96px;
+        color: var(--hb-purple);
+      }
+      .cta-btn {
+        display: block;
+        width: fit-content;
+        margin: var(--space-5) auto;
+        background: var(--hb-blue);
+        color: #fff;
+        font-family: var(--font-body);
+        font-size: 22px;
+        padding: var(--space-4) var(--space-8);
+        border-radius: var(--radius-small);
+      }
+      .fineprint {
+        font-family: var(--font-body);
+        font-size: 15px;
+        line-height: 22px;
+        color: var(--ink-600);
+        margin-top: var(--space-4);
+      }
+      .fineprint u {
+        text-underline-offset: 2px;
+      }
+
+      .reply-bar {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+      }
+      .rpill {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-pill);
+        padding: var(--space-3);
+        color: var(--ink-600);
+      }
+      .rpill span {
+        color: var(--ink-600);
+      }
+      .rcircle {
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: var(--ink-600);
+        flex: 0 0 auto;
+      }
+
+      /* ---- compose ---- */
+      .cbar {
+        display: flex;
+        align-items: center;
+        margin-top: var(--space-2);
+        font-size: 24px;
+        color: var(--ink-900);
+      }
+      .cbar .x {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-pill);
+        background: var(--functional);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .cbar .sp {
+        flex: 1;
+      }
+      .cbar i + i,
+      .cbar .x + i {
+        margin-left: var(--space-6);
+      }
+      .frow {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        min-height: 54px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .frow .dn {
+        margin-left: auto;
+        color: var(--ink-600);
+        font-size: 18px;
+      }
+      .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 24px;
+        background: var(--accent-interactive);
+        vertical-align: -5px;
+      }
+      .sugg {
+        display: flex;
+        gap: var(--space-8);
+        padding: var(--space-4) 0 var(--space-5);
+        border-bottom: 1px solid var(--border-subtle);
+      }
+      .sugg .p {
+        text-align: center;
+        max-width: 96px;
+      }
+      .sugg .avatar {
+        width: 72px;
+        height: 72px;
+        font-size: 30px;
+        margin: 0 auto var(--space-2);
+      }
+      .quote {
+        border-left: 3px solid var(--border-control);
+        padding-left: var(--space-3);
+        margin-top: var(--space-3);
+      }
+      .brand-card {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-control);
+        padding: var(--space-4) var(--space-5);
+        margin: var(--space-4) 0 var(--space-3);
+      }
+      .brand-card i {
+        font-size: 26px;
+        color: var(--av-navy);
+      }
+      .brand-card span {
+        font-family: var(--font-display);
+        font-weight: var(--weight-medium);
+        letter-spacing: 3px;
+        font-size: 19px;
+        color: var(--av-navy);
+      }
+      .img-ph {
+        height: 90px;
+        background: var(--functional);
+        border-radius: var(--radius-small) var(--radius-small) 0 0;
+      }
+
+      /* ---- simulated iOS keyboard: preview-only OS material (raw grays) ---- */
+      .kb {
+        margin: auto calc(-1 * var(--screen-inset)) 0;
+        background: #d3d6dc;
+        padding: var(--space-2) var(--space-1) 0;
+      }
+      .kb-sug {
+        display: flex;
+        margin-bottom: var(--space-2);
+      }
+      .kb-sug span {
+        flex: 1;
+        text-align: center;
+        padding: var(--space-2) 0;
+        font-family: -apple-system, sans-serif;
+        font-size: 17px;
+        color: #1c1c1e;
+      }
+      .kb-sug span + span {
+        border-left: 1px solid #b6bac1;
+      }
+      .kb-r {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 9px;
+        padding: 0 2px;
+      }
+      .k {
+        flex: 1;
+        max-width: 34px;
+        height: 42px;
+        background: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 1px 0 rgba(60, 60, 67, 0.36);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, sans-serif;
+        font-size: 22px;
+        color: #1c1c1e;
+      }
+      .k.fn {
+        max-width: none;
+        flex: 1.3;
+        background: #b3b9c4;
+        font-size: 15px;
+      }
+      .k.spc {
+        max-width: none;
+        flex: 4;
+      }
+      .kb-foot {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--space-2) var(--space-6) var(--space-4);
+        font-size: 24px;
+        color: #51555c;
+      }
+
+      /* ---- account sheet ---- */
+      .acc-wrap {
+        height: 100%;
+        background: #000; /* dimmed app behind the sheet — preview-only */
+        padding-top: 52px;
+        display: flex;
+        flex-direction: column;
+      }
+      .acc-sheet {
+        flex: 1;
+        background: var(--functional);
+        border-radius: var(--radius-control) var(--radius-control) 0 0;
+        padding: var(--space-4) var(--space-4) 0;
+        overflow: hidden;
+      }
+      .acc-top {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        text-align: center;
+      }
+      .acc-av {
+        width: 96px;
+        height: 96px;
+        font-size: 40px;
+        margin: var(--space-5) auto var(--space-3);
+        position: relative;
+      }
+      .acc-av .cam {
+        position: absolute;
+        right: -2px;
+        bottom: -2px;
+        width: 30px;
+        height: 30px;
+        border-radius: var(--radius-pill);
+        background: var(--card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: var(--ink-600);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+      .manage-pill {
+        display: block;
+        width: fit-content;
+        margin: var(--space-3) auto var(--space-5);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-pill);
+        padding: var(--space-2) var(--space-5);
+      }
+      .acc-group {
+        background: var(--card);
+        border-radius: var(--radius-control);
+        margin-bottom: var(--space-1);
+        padding: 0 var(--space-4);
+      }
+      .acc-cell {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        min-height: 56px;
+        padding: var(--space-2) 0;
+      }
+      .acc-cell .grow {
+        flex: 1;
+        min-width: 0;
+      }
+      .acc-cell .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      .acc-cell i {
+        font-size: 22px;
+        color: var(--accent-interactive);
+      }
+      .storage {
+        background: var(--card);
+        border-radius: var(--radius-control);
+        margin-top: var(--space-4);
+        padding: var(--space-4);
+      }
+      .sbar {
+        height: 4px;
+        background: var(--border-subtle);
+        border-radius: var(--radius-pill);
+        margin: var(--space-3) 0 var(--space-2);
+        position: relative;
+      }
+      .sbar .fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 54%;
+        background: var(--accent-interactive);
+        border-radius: var(--radius-pill);
+      }
+      .slinks {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-6);
+        margin-top: var(--space-3);
+      }
+      .acc-foot {
+        text-align: center;
+        padding: var(--space-6) 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <script src="../mockup.js"></script>
+    <script>
+      const icon = (name, fill = false) => `<i class="ph${fill ? "-fill" : ""} ph-${name}"></i>`;
+      const av = (cls, initial, colorVar) =>
+        `<span class="avatar ${cls}" style="background: var(--${colorVar})">${initial}</span>`;
+
+      /* ---- inbox list ---- */
+
+      const mrow = (avatar, who, subj, snippet, time, { unread = false, imp = false } = {}) => `
+        <div class="mrow">${avatar}
+          <div class="mc">
+            <div class="mline"><span class="who">${imp ? `<i class="ph-fill ph-caret-double-right imp"></i>` : ""}<span class="${unread ? "t-row-strong" : "t-row"} clip">${who}</span></span><span class="t-meta">${time}</span></div>
+            <span class="${unread ? "t-row-strong" : "t-row"} clip" style="font-size:15px">${subj}</span>
+            <div class="snip-line"><span class="t-snippet clip">${snippet}</span><i class="ph ph-star star"></i></div>
+          </div>
+        </div>`;
+
+      const inboxScreen = phone(
+        `<div class="search-pill">${icon("list")}<span class="t-search">Search in mail</span>${av("av-sm", "S", "av-purple")}</div>
+         <div class="inbox-hdr"><span class="t-overline">All inboxes</span></div>
+         ${mrow(av("av-row", "N", "av-green"), "Nova Recruiting", "Senior Product Engineer - Producti…", "", "12:05 PM", { unread: true })}
+         ${mrow(av("av-row", "W", "av-blue"), "WorkWire Job Alerts", "Full Stack Engineer - Remote at Sun…", "Posted on 7/22/2026", "11:38 AM", { unread: true })}
+         ${mrow(av("av-row", "M", "av-purple"), "Maya Chen", "Reminder: Your Upcoming Interview wit…", "Sam Parker, you have an upcomin…", "11:00 AM", { imp: true })}
+         ${mrow(av("av-row", "W", "av-blue"), "WorkWire Job Alerts", "Staff Platform Engineer at Northwi…", "Posted on 7/23/2026", "9:39 AM", { imp: true })}
+         ${mrow(av("av-row", "D", "av-teal"), "Dana Whitfield", "Stable ad performance is a warning sig…", "Indie Letter #89", "9:06 AM")}
+         ${mrow(av("av-row", "L", "av-navy"), "The Ledger Team", "Start earning cashback with every p…", "You've activated your IO credit card. No…", "8:02 AM", { unread: true })}
+         ${mrow(av("av-row", "R", "av-teal"), "readings@cityutility.com", "Please submit your meter photo", "Dear customer, for accurate billin…", "3:19 AM")}
+         ${mrow(av("av-row", "M", "av-red"), "MLDigest", "[MLDigest] “Laguna S 2…", "a quiet day lets us highlight a new neol…", "1:21 AM", { unread: true })}
+         <div class="fab">${icon("pencil-simple", true)}<span class="t-btn">Compose</span></div>
+         <div class="gbar">
+           <span class="tab on">${icon("envelope-simple", true)}<span class="badge">99+</span></span>
+           <span class="tab">${icon("video-camera")}</span>
+         </div>`,
+        { scroll: false },
+      );
+
+      /* ---- drawer ---- */
+
+      const behind = `
+        <div class="behind">
+          ${["12:05 PM", "11:38 AM", "11:00 AM", "9:39 AM", "9:06 AM", "8:02 AM"].map((t) => `<div class="bt"><span class="t-meta">${t}</span><i class="ph ph-star"></i></div>`).join("")}
+        </div>
+        <div class="dim"></div>`;
+
+      const drow = (glyph, label, { cnt = "", on = false, fill = false, color = "" } = {}) =>
+        `<div class="drow ${on ? "on" : ""}"><i class="ph${fill ? "-fill" : ""} ph-${glyph}" ${color ? `style="color: var(--${color})"` : ""}></i><span class="t-item">${label}</span>${cnt ? `<span class="t-meta cnt">${cnt}</span>` : ""}</div>`;
+
+      const drawerFolders = phone(
+        `${behind}
+         <div class="panel">
+           <div class="gm-logo">${icon("envelope-simple", true)}<span>Gmail</span></div>
+           <div style="padding-top: var(--space-2)">
+             ${drow("tray", "All inboxes", { cnt: "99+", on: true, fill: true })}
+             <div class="dsep"></div>
+             ${drow("envelope-simple", "Primary", { cnt: "99+" })}
+             ${drow("users", "Social")}
+             ${drow("tag", "Promotions")}
+             ${drow("info", "Updates")}
+             <div class="dsep"></div>
+             ${drow("star", "Starred")}
+             ${drow("clock", "Snoozed")}
+             ${drow("caret-double-right", "Important", { cnt: "99+" })}
+             ${drow("bag-simple", "Purchases", { cnt: "99+" })}
+             ${drow("paper-plane-tilt", "Sent")}
+             ${drow("clock-clockwise", "Scheduled")}
+             ${drow("upload-simple", "Outbox")}
+             ${drow("file", "Drafts")}
+             ${drow("envelope-open", "All mail")}
+           </div>
+         </div>`,
+        { bare: true },
+      );
+
+      const drawerLabels = phone(
+        `${behind}
+         <div class="panel">
+           <div class="gm-logo">${icon("envelope-simple", true)}<span>Gmail</span></div>
+           <div style="padding-top: var(--space-2)">
+             ${drow("envelope-simple-open", "Manage subscriptions")}
+             <div class="dsep"></div>
+             <div class="dhdr"><span class="t-overline">Labels</span></div>
+             ${drow("tag", "Family")}
+             ${drow("tag", "Finance")}
+             ${drow("tag", "Flat 12", { color: "tag-yellow" })}
+             ${drow("tag", "Newsletters", { color: "tag-green" })}
+             ${drow("tag", "Receipts", { color: "tag-blue" })}
+             ${drow("tag", "Side Project", { color: "tag-red" })}
+             ${drow("tag", "Travel", { color: "tag-pink" })}
+             ${drow("tag", "Work")}
+             ${drow("tag", "Work/Contracts", { color: "tag-blue" })}
+           </div>
+         </div>`,
+        { bare: true },
+      );
+
+      /* ---- thread view ---- */
+
+      const job = (logoHtml, title, meta, salary, chip = false) => `
+        <div class="job">${logoHtml}
+          <div>
+            <span class="job-title">${title}</span>
+            <div class="t-snippet" style="font-size: 16px; color: var(--ink-600)">${meta}</div>
+            ${salary ? `<div class="t-snippet">${salary}</div>` : ""}
+            ${chip ? `<span class="rec-chip">${icon("target")}<span class="t-chip">Actively recruiting</span></span>` : ""}
+          </div>
+        </div>`;
+
+      const threadScreen = phone(
+        `<div class="tbar">${icon("caret-left")}<span class="sp"></span>${icon("box-arrow-down")}${icon("trash")}${icon("envelope-simple")}${icon("dots-three")}</div>
+         <div class="subject-row">
+           <h2 class="t-subject-lg" style="flex:1">Staff Platform Engineer at Northwind: up to $190K/year <i class="ph-fill ph-caret-double-right imp" style="font-size:20px"></i> <span class="chip t-chip">Inbox</span></h2>
+           <i class="ph ph-star star" style="margin-top: var(--space-2)"></i>
+         </div>
+         <div class="sender">
+           ${av("av-row", "W", "av-blue")}
+           <div>
+             <div><span class="t-row-strong" style="font-weight: var(--weight-medium)">WorkWire Job Alerts</span> <i class="ph-fill ph-seal-check verified"></i></div>
+             <div class="t-meta" style="font-weight: var(--weight-regular)">9:39 AM</div>
+             <div class="t-meta" style="font-weight: var(--weight-regular)">to Sam ${icon("caret-down")}</div>
+           </div>
+           <div class="icons">${icon("smiley")}${icon("arrow-bend-up-left")}${icon("dots-three")}</div>
+         </div>
+         <div class="mail-body">
+           <div class="ww-head"><span class="ww-mark">Work<span style="background: var(--accent-interactive); color: #fff; border-radius: 4px; padding: 0 4px">Wire</span></span>
+             <div class="icons">${icon("chats")}${icon("users")}<span class="bell">${icon("bell", true)}<span class="badge">5</span></span></div>
+           </div>
+           <p class="t-subject-lg" style="margin-top: var(--space-5)">Your job alert for <b>Staff Platform Engineer</b></p>
+           <p style="margin-top: var(--space-2)"><span class="t-link" style="font-size: 17px">Manage alerts</span></p>
+           ${job(`<span class="logo" style="background: var(--av-purple)">${icon("heart", true)}</span>`, "Staff Platform Engineer", "Northwind · United States (Remote)", "$150K–$190K / year", true)}
+           ${job(`<span class="logo" style="background: var(--tag-green)">${icon("plant", true)}</span>`, "Staff Engineer", "Fern &amp; Field · United States (Remote)", "")}
+           ${job(`<span class="logo" style="background: var(--av-navy)">${icon("lighthouse", true)}</span>`, "Staff Software Engineer", "Beacon Health · United States (Remote)", "")}
+         </div>`,
+        {
+          footer: `<div class="reply-bar">
+            <span class="rpill">${icon("arrow-bend-up-left")}<span class="t-btn" style="color: var(--ink-600)">Reply</span></span>
+            <span class="rpill">${icon("arrow-bend-up-right")}<span class="t-btn" style="color: var(--ink-600)">Forward</span></span>
+            <span class="rcircle">${icon("smiley")}</span>
+          </div>`,
+        },
+      );
+
+      /* ---- promo email thread (Harbor Savings) ---- */
+
+      const replyFooter = `<div class="reply-bar">
+        <span class="rpill">${icon("arrow-bend-up-left")}<span class="t-btn" style="color: var(--ink-600)">Reply</span></span>
+        <span class="rpill">${icon("arrow-bend-up-right")}<span class="t-btn" style="color: var(--ink-600)">Forward</span></span>
+        <span class="rcircle">${icon("smiley")}</span>
+      </div>`;
+
+      const promoTopScreen = phone(
+        `<div class="tbar">${icon("caret-left")}<span class="sp"></span>${icon("box-arrow-down")}${icon("trash")}${icon("envelope-simple")}${icon("dots-three")}</div>
+         <div class="subject-row">
+           <h2 class="t-subject-lg" style="flex:1">We raised our 14-month CD rate—currently 4.10% APY! <i class="ph-fill ph-caret-double-right imp" style="font-size:20px"></i></h2>
+           <i class="ph ph-star star" style="margin-top: var(--space-2)"></i>
+         </div>
+         <div style="margin-top: var(--space-2)"><span class="chip t-chip">Inbox</span></div>
+         <div class="sender">
+           ${av("av-row", "H:", "av-navy")}
+           <div>
+             <div><span class="t-row-strong" style="font-weight: var(--weight-medium)">Harbor Savings Ba…</span> <i class="ph-fill ph-seal-check verified"></i></div>
+             <div class="t-meta" style="font-weight: var(--weight-regular)">Jul 10</div>
+             <div class="t-meta" style="font-weight: var(--weight-regular)">to sam.parker ${icon("caret-down")}</div>
+           </div>
+           <div class="icons">${icon("smiley")}${icon("arrow-bend-up-left")}${icon("dots-three")}</div>
+         </div>
+         <div class="mail-body harbor" style="border-top: none; padding-top: var(--space-4)">
+           <div class="preheader"><span class="t-chip" style="font-weight: var(--weight-regular); font-size: 14px">Limited-time offer: Special 14-month CD Term Length</span><span class="t-chip vib" style="font-size: 15px">View in Browser</span></div>
+           <div class="bank-mark"><div class="big">Harbor:</div><div class="sub">by Anchor &amp; Co.</div></div>
+           <div class="hero">
+             <span class="promo-pill">New, higher rate!</span>
+             <div class="hero-h">Take advantage of this <b>special CD term</b> length</div>
+             <div class="illus">
+               <span class="cloud" style="left: 8px; bottom: 60px"></span>
+               <span class="cloud" style="right: 12px; top: 4px; width: 58px; height: 20px"></span>
+               <span class="clock">
+                 <span class="hand" style="height: 62px; transform: translate(-50%, -100%) rotate(40deg)"></span>
+                 <span class="hand" style="height: 80px; transform: translate(-50%, -100%) rotate(-25deg)"></span>
+               </span>
+               <span class="coin-box"></span>
+               <span class="coin"></span>
+             </div>
+           </div>
+         </div>`,
+        { footer: replyFooter },
+      );
+
+      const promoBodyScreen = phone(
+        `<div class="tbar">${icon("caret-left")}<span class="sp"></span>${icon("box-arrow-down")}${icon("trash")}${icon("envelope-simple")}${icon("dots-three")}</div>
+         <div class="harbor" style="padding-top: var(--space-4)">
+           <p class="t-body" style="color: var(--ink-600); font-size: 22px; line-height: 30px">Hi Sam,</p>
+           <p class="t-body" style="color: var(--ink-600); font-size: 22px; line-height: 30px; margin-top: var(--space-5)">Make your money work for you—for a limited time, you can open our 14-month CD (and earn a great rate)!</p>
+           <div class="rate-hero">
+             <span class="promo-pill">New, higher rate!</span>
+             <div class="cd" style="margin-top: var(--space-4)">14-Month High-Yield CD</div>
+             <div class="t-body" style="color: var(--ink-600); font-size: 20px">Currently</div>
+             <div class="pct">4.10%</div>
+             <div class="t-body" style="color: var(--ink-600); font-size: 20px">Annual Percentage Yield</div>
+             <span class="cta-btn">Open an Account</span>
+           </div>
+           <p class="fineprint">14-month term length is a limited-time offer, available until July 28, 2026. Annual Percentage Yield (APY) as of July 9, 2026 and could change before your CD is opened and funded. $500 minimum. If you open a CD today and deposit at least $500 within 10 days, you will lock in the rate shown above. <u>Penalties that may reduce CD earnings will apply to a withdrawal of principal prior to maturity</u>. <u>Maximum balance limits apply</u>.</p>
+         </div>`,
+        { footer: replyFooter },
+      );
+
+      /* ---- keyboard ---- */
+
+      const kbRow = (keys) => `<div class="kb-r">${keys.split("").map((k) => `<span class="k">${k}</span>`).join("")}</div>`;
+      const keyboard = (caps = false, suggestions = null) => `
+        <div class="kb">
+          ${suggestions ? `<div class="kb-sug">${suggestions.map((s) => `<span>${s}</span>`).join("")}</div>` : ""}
+          ${kbRow(caps ? "QWERTYUIOP" : "qwertyuiop")}
+          <div class="kb-r" style="padding: 0 18px">${(caps ? "ASDFGHJKL" : "asdfghjkl").split("").map((k) => `<span class="k">${k}</span>`).join("")}</div>
+          <div class="kb-r"><span class="k fn">${icon("arrow-fat-up")}</span>${(caps ? "ZXCVBNM" : "zxcvbnm").split("").map((k) => `<span class="k">${k}</span>`).join("")}<span class="k fn">${icon("backspace")}</span></div>
+          <div class="kb-r"><span class="k fn">123</span><span class="k fn">${icon("smiley")}</span><span class="k spc">space</span><span class="k fn">@</span><span class="k fn">.</span><span class="k fn">return</span></div>
+          <div class="kb-foot">${icon("globe")}${icon("microphone")}</div>
+        </div>`;
+
+      /* ---- compose (empty) ---- */
+
+      const composeBar = `<div class="cbar"><span class="x">${icon("x")}</span><span class="sp"></span>${icon("paperclip")}${icon("paper-plane-tilt")}${icon("dots-three-circle")}</div>`;
+
+      const composeScreen = phone(
+        `${composeBar}
+         <div class="frow" style="margin-top: var(--space-3)"><span class="t-body" style="color: var(--ink-600)">To</span><span class="cursor"></span><span class="dn">${icon("caret-down")}</span></div>
+         <div style="padding-top: var(--space-4)"><span class="t-overline" style="letter-spacing: 0">Suggestions</span> ${icon("info")}</div>
+         <div class="sugg">
+           <div class="p">${av("", "J", "av-purple")}<span class="t-snippet" style="color: var(--ink-900)">Jordan Ellis</span></div>
+           <div class="p">${av("", "P", "av-teal")}<span class="t-snippet" style="color: var(--ink-900)">Priya Nair</span></div>
+         </div>
+         <div class="frow"><span class="t-body" style="color: var(--ink-600)">From</span><span class="t-body">sam.parker@gmail.com</span><span class="dn">${icon("caret-down")}</span></div>
+         <div class="frow"><span class="t-body" style="color: var(--ink-600)">Subject</span></div>
+         <div style="padding-top: var(--space-4)"><span class="t-body" style="color: var(--ink-600)">Compose email</span></div>
+         ${keyboard(false)}`,
+        { scroll: false },
+      );
+
+      /* ---- reply with quote ---- */
+
+      const replyScreen = phone(
+        `${composeBar}
+         <div class="frow" style="margin-top: var(--space-3)">${icon("arrow-bend-up-left")}${icon("caret-down")}<span class="t-body">The Ledger Team</span></div>
+         <div class="frow"><span class="t-body" style="color: var(--ink-600)">From</span><span class="t-body">sam.parker@gmail.com</span><span class="dn">${icon("caret-down")}</span></div>
+         <div class="frow"><span class="t-body">Re: Start earning cashback with every purchase</span></div>
+         <div style="padding-top: var(--space-4)"><span class="cursor"></span></div>
+         <div class="t-body" style="margin-top: var(--space-2)">On Thu, Jul 23, 2026 at 8:02 AM The Ledger Team &lt;hello@ledger.bank&gt; wrote:</div>
+         <div class="quote">
+           <div class="brand-card">${icon("circles-three", true)}<span>LEDGER</span></div>
+           <div class="img-ph"></div>
+         </div>
+         ${keyboard(true, ["I", "The", "I'm"])}`,
+        { scroll: false },
+      );
+
+      /* ---- account sheet ---- */
+
+      const accountScreen = phone(
+        `<div class="acc-wrap">
+          <div class="acc-sheet">
+            <div class="acc-top"><span></span><span class="t-meta" style="font-size: 15px">sam.parker@gmail.com (99+)</span><span class="t-btn">Done</span></div>
+            <span class="avatar acc-av" style="background: var(--av-purple)">S<span class="cam">${icon("camera", true)}</span></span>
+            <div style="text-align: center"><span class="t-hi">Hi, Sam!</span></div>
+            <span class="manage-pill"><span class="t-btn" style="font-size: 15px">Manage your Google Account</span></span>
+            <div class="acc-group"><div class="acc-cell"><span class="t-row-strong grow" style="font-weight: var(--weight-medium)">Switch account</span>${icon("caret-up")}</div></div>
+            <div class="acc-group"><div class="acc-cell">${av("", "S", "av-purple")}<div class="grow"><div class="t-row clip">Sam Parker</div><div class="t-snippet clip">sam.parker@gmail.com</div></div></div></div>
+            <div class="acc-group"><div class="acc-cell">${av("", "S", "av-teal")}<div class="grow"><div class="t-row clip">Sam Parker</div><div class="t-snippet clip">sam.p.dev@gmail.com</div></div><span class="t-meta">31</span></div></div>
+            <div class="acc-group"><div class="acc-cell">${icon("plus")}<span class="t-row grow">Add another account</span></div></div>
+            <div class="acc-group"><div class="acc-cell">${icon("user-gear")}<span class="t-row grow">Manage accounts on this device</span></div></div>
+            <div class="storage">
+              <div style="display: flex; align-items: center; gap: var(--space-2)">${icon("cloud")}<span class="t-row" style="font-weight: var(--weight-medium)">54% of 15 GB used</span></div>
+              <div class="sbar"><span class="fill"></span></div>
+              <span class="t-snippet">8.1 GB of 15 GB</span>
+              <div class="slinks"><span class="t-btn" style="font-size: 15px">Get storage</span><span class="t-btn" style="font-size: 15px">Clean up space</span></div>
+            </div>
+            <div class="acc-foot"><span class="t-meta">Privacy Policy &nbsp;·&nbsp; Terms of Service</span></div>
+          </div>
+        </div>`,
+        { bare: true },
+      );
+
+      /* ---- page ---- */
+
+      renderMockupPage({
+        title: "Gmail — fidelity study",
+        intro:
+          "Second fidelity study from the mobile-mockups-skill skill: the Gmail iOS app, rebuilt from seven real captures (iPhone, 390×844). Google's Material palette as design-system roles; Roboto stands in for Google Sans, Phosphor for Google's icons. All senders, accounts, avatars, and labels are fictional — the study replicates the interface, never the user's mail. Not affiliated with Google.",
+        contrastPairs: [
+          ["--ink-900", "--canvas"],
+          ["--ink-900", "--functional"],
+          ["--ink-600", "--canvas"],
+          ["--ink-400", "--canvas"],
+          ["--accent-interactive", "--canvas"],
+          ["--accent-interactive", "--functional"],
+          ["--accent-interactive", "--accent-decorative"],
+          ["--brand", "--canvas"],
+          ["--brand", "--accent-tint"],
+          ["--btn-label", "--btn-fill"],
+        ],
+        sections: [
+          {
+            id: "inbox",
+            title: "Inbox & drawer",
+            desc: "The list with its three-line rows and importance markers, and the navigation drawer in both states — system folders and user labels.",
+            cols: [
+              {
+                label: "<b>All inboxes.</b> Unread rows bold, read rows regular; yellow marker = importance; Compose FAB above the two-tab bar.",
+                tag: "From capture",
+                html: inboxScreen,
+              },
+              {
+                label: "<b>Drawer — folders.</b> Selected item: red on pink, right-rounded pill bleeding from the left edge.",
+                tag: "From capture",
+                html: drawerFolders,
+              },
+              {
+                label: "<b>Drawer — labels.</b> User labels with colored tags. Names here are fictional stand-ins for the captured ones.",
+                tag: "From capture",
+                html: drawerLabels,
+              },
+            ],
+            notes: [
+              note(
+                "Fictional data policy",
+                "The captures contained a real mailbox. Every sender, subject, address, avatar, and label was replaced with invented equivalents that keep the same structure — row heights, truncation, badge counts — so the fidelity claim survives the anonymization.",
+              ),
+            ],
+          },
+          {
+            id: "read",
+            title: "Reading an email",
+            desc: "Thread view: large subject with importance marker and Inbox chip, verified sender row, branded HTML email bodies, and the Reply/Forward footer.",
+            cols: [
+              {
+                label: "<b>Job alert.</b> The email body is itself a small brand system (WorkWire) — mockups can nest one design system inside another.",
+                tag: "From capture",
+                html: threadScreen,
+              },
+              {
+                label: "<b>Bank promo, top.</b> Preheader strip, wordmark, hero panel with a CSS illustration — the advertiser's palette stays scoped to the email.",
+                tag: "From capture",
+                html: promoTopScreen,
+              },
+              {
+                label: "<b>Bank promo, scrolled.</b> The offer: giant rate, CTA, fine print with underlined terms.",
+                tag: "From capture",
+                html: promoBodyScreen,
+              },
+            ],
+            notes: [
+              note(
+                "Nested brand systems",
+                "Marketing emails carry their sender's design system, not the app's. The Harbor palette lives as custom properties scoped to the email block in Layer 2 — tokenized, but deliberately outside design-system.css, because the app doesn't own advertisers' colors.",
+              ),
+            ],
+          },
+          {
+            id: "compose",
+            title: "Compose & account",
+            desc: "Composer empty state with contact suggestions, a reply with quoted content, and the account switcher sheet — including a simulated iOS keyboard.",
+            cols: [
+              {
+                label: "<b>Compose.</b> Suggestions surface before any typing; From is prefilled. Keyboard is simulated OS material.",
+                tag: "From capture",
+                html: composeScreen,
+              },
+              {
+                label: "<b>Reply.</b> Quoted thread under the cursor with the vertical quote bar; QWERTY caps + suggestion strip.",
+                tag: "From capture",
+                html: replyScreen,
+              },
+              {
+                label: "<b>Account sheet.</b> Google's blue-gray sheet: big avatar, account list, storage meter. All accounts fictional.",
+                tag: "From capture",
+                html: accountScreen,
+              },
+            ],
+            notes: [
+              note(
+                "Keyboard as preview material",
+                "The iOS keyboard is OS chrome, not product UI — it renders from raw grays in Layer 2 (the method's preview-only exception) and exists so composer screens read as moments, not empty forms.",
+              ),
+            ],
+          },
+        ],
+        pageNotes: [
+          note(
+            "Provenance",
+            "Reference: seven Gmail iOS captures at 1170×2532 = 390×844 @3x, navigated and captured by hand. Status bar shows the workbench's generic 9:41. Roboto approximates Google Sans; Phosphor approximates Google's icon set; the Gmail 'M' is a stand-in glyph.",
+          ),
+        ],
+      });
+    </script>
+  </body>
+</html>
