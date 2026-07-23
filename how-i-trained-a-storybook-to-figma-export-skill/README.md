@@ -18,6 +18,3 @@ These are **reference files, not a drop-in package** — they're published so
 you can read them alongside the article and adapt the approach to your own
 setup. Paths, selectors, and assumptions match the project they were trained
 on.
-
-If you're after a ready-to-install skill instead, see
-[`mobile-mockups`](../mobile-mockups/) in this repo.
