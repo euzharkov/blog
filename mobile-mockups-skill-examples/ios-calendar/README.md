@@ -7,7 +7,7 @@ closely as a static HTML mockup can. It demonstrates that the method handles
 "match this exactly" briefs, not just green-field design. Not affiliated
 with Apple.
 
-![Animated tour of the iOS Calendar mockup](ios-calendar-mockup-demo.gif)
+[Video tour of the iOS Calendar mockup](ios-calendar-mockup-demo.mp4)
 
 What's here:
 
