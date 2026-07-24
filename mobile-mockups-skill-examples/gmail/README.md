@@ -6,7 +6,7 @@ Gmail iOS app rebuilt from seven real captures (iPhone, 390×844 @3x). Where
 tackles a denser product — list rows, an overlay drawer, a branded HTML
 email, a simulated keyboard, and a bottom sheet. Not affiliated with Google.
 
-[Video tour of the Gmail mockup](gmail-mockup-demo.mp4)
+![Animated tour of the Gmail mockup](gmail-mockup-demo.gif)
 
 **All data is fictional.** The captures contained a real mailbox; every
 sender, subject, address, avatar, account, and label was replaced with
